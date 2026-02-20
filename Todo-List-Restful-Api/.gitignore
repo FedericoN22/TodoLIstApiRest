@@ -1,0 +1,22 @@
+# Archivos de salida de compilación
+[Bb]in/
+[Oo]bj/
+
+# Base de Datos local (SQLite)
+# Es mejor que cada desarrollador cree la suya con las migraciones
+*.db
+*.db-shm
+*.db-wal
+
+# Archivos de configuración personal y secretos
+.vs/
+.vscode/
+*.user
+*.userosscache
+*.sln.docstates
+appsettings.Development.json
+
+# Archivos temporales de .NET
+*.swp
+*.lock
+.DS_Store
