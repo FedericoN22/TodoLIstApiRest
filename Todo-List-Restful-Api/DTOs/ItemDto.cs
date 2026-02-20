@@ -1,0 +1,1 @@
+public record ItemDto(string Title, string Description);

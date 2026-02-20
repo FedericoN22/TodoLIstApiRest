@@ -1,0 +1,34 @@
+@ApiTest_HostAddress = http://127.0.0.1:5218
+### User Registration
+POST {{ApiTest_HostAddress}}/user/register
+Content-Type: application/json
+
+{
+    "Name": "testuser",
+    "Email": "testuser@example.com",
+    "Password": "Test@1234"
+}
+
+### User Login
+POST {{ApiTest_HostAddress}}/user/login
+Content-Type: application/json
+
+{
+    "Email": "testuser@example.com",
+    "Password": "Test@1234"
+}
+
+### Create a new Todo Item
+POST {{ApiTest_HostAddress}}/items/todo
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjIiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiZXhwIjoxNzcxNjExODMxfQ.elpU_Zf2kdVqNdtJV_XJeYM2S4CV8GujpGZYvwBU2aU
+
+{
+    "Title": "Buy groceries",
+    "Description": "Milk, Bread, Eggs",
+    "IsCompleted": false
+}
+
+### Get all Todo Items
+GET {{ApiTest_HostAddress}}/items/todo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjIiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiZXhwIjoxNzcxNjExODMxfQ.elpU_Zf2kdVqNdtJV_XJeYM2S4CV8GujpGZYvwBU2aU
