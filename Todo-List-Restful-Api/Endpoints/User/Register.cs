@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using DBEntityFrameworkCore;
 using TodoList.Entitys;
+using BCrypt.Net;
 public static class Register
 {
     public static void MapRegisterEndpoints(this WebApplication app)
@@ -20,7 +21,7 @@ public static class Register
             {
                 Name = userDto.Name,
                 Email = userDto.Email,
-                Password = userDto.Password,
+                Password = BCrypt.Net.BCrypt.HashPassword(userDto.Password, workFactor: 13),
                 Role = "User"
             };
 
