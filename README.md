@@ -1,206 +1,216 @@
-# 🔐 Todo List RESTful API
+# 📝 Todo List RESTful API
 
-RESTful API desarrollada con **ASP.NET Core (.NET 8)** para la gestión
-de tareas (Todo List), implementando autenticación y autorización
-mediante **JWT (JSON Web Tokens)** y control de acceso basado en roles.
+API RESTful desarrollada en **.NET 8** siguiendo buenas prácticas de arquitectura backend moderna.  
+El proyecto implementa autenticación segura mediante **JWT** y protección de contraseñas usando **hashing**, simulando un backend real listo para producción.
 
-El proyecto fue creado como práctica backend para aplicar diseño de APIs
-modernas, seguridad y organización profesional de endpoints usando
-**Minimal APIs**.
+---
 
-------------------------------------------------------------------------
+## 🚀 Descripción
 
-## 🚀 Features
+Esta API permite gestionar tareas (ToDo) con autenticación de usuarios.  
+Cada usuario puede registrarse, iniciar sesión y administrar sus propias tareas protegidas mediante autorización basada en tokens.
 
--   ✅ Registro de usuarios
--   🔐 Login con JWT
--   🪪 Autenticación mediante Bearer Token
--   👮 Autorización basada en roles
--   📝 CRUD completo de tareas
--   🧱 Arquitectura modular por endpoints
--   📦 Uso de DTOs para transferencia de datos
--   🗄️ Persistencia con Entity Framework Core + SQLite
--   📑 Swagger configurado con autenticación JWT
+El objetivo del proyecto fue practicar:
 
-------------------------------------------------------------------------
+- Diseño de APIs REST
+- Autenticación y autorización
+- Seguridad backend
+- Arquitectura limpia en Minimal APIs
+- Persistencia de datos con Entity Framework Core
 
-## 🛠️ Tecnologías utilizadas
+---
 
--   **.NET 8**
--   **ASP.NET Core Minimal API**
--   **Entity Framework Core**
--   **SQLite**
--   **JWT Authentication**
--   **Swagger / OpenAPI**
--   C#
+## 🧰 Tecnologías utilizadas
 
-------------------------------------------------------------------------
+- **.NET 8**
+- **ASP.NET Core Minimal API**
+- **Entity Framework Core**
+- **SQLite**
+- **JWT (JSON Web Tokens)**
+- **Password Hashing (BCrypt)**
+- **Swagger / OpenAPI**
 
-## 📂 Estructura del proyecto
+---
 
-    Todo-List-Restful-Api/
-    │
-    ├── DTOs/              # Objetos de transferencia de datos
-    │   ├── ItemDto.cs
-    │   └── UserDto.cs
-    │
-    ├── Entitys/           # Entidades de base de datos
-    │   ├── TODO-Item.cs
-    │   └── User.cs
-    │
-    ├── Endpoints/
-    │   ├── User/
-    │   │   ├── Register.cs
-    │   │   └── Login.cs
-    │   │
-    │   ├── Item/
-    │   │   └── Item.cs
-    │   │
-    │   └── Admin/
-    │       └── AdminEnd.cs
-    │
-    ├── Migrations/
-    ├── ApplicationDbContext.cs
-    ├── Program.cs
-    └── appsettings.json
+## 🔐 Autenticación y Seguridad
 
-------------------------------------------------------------------------
+El proyecto implementa un flujo completo de autenticación profesional:
 
-## 🔐 Autenticación JWT
+### 1️⃣ Registro de usuario
+- El usuario crea una cuenta.
+- La contraseña **NO se guarda en texto plano**.
+- Se aplica hashing usando **BCrypt**.
 
-La API utiliza **JSON Web Tokens** para autenticar usuarios.
-
-### Flujo de autenticación
-
-1.  Usuario se registra (`/user/register`)
-2.  Usuario inicia sesión (`/user/login`)
-3.  La API genera un **JWT**
-4.  El cliente envía el token en cada request:
-
-```{=html}
-<!-- -->
+```csharp
+BCrypt.Net.BCrypt.HashPassword(password);
 ```
-    Authorization: Bearer {token}
 
-El token incluye claims:
+👉 Esto genera un hash irreversible que protege las credenciales incluso si la base de datos se filtra.
 
--   UserId
--   Username
--   Role
+---
 
-------------------------------------------------------------------------
+### 2️⃣ Login
+- Se verifica la contraseña con:
 
-## 👮 Autorización por Roles
+```csharp
+BCrypt.Net.BCrypt.Verify(password, storedHash);
+```
 
-El sistema implementa control de acceso mediante roles almacenados en la
-base de datos.
+- Si es válida, el servidor genera un **JWT**.
 
-Ejemplo:
+---
 
--   `USER` → acceso a operaciones básicas
--   `ADMIN` → endpoints administrativos protegidos
+### 3️⃣ JWT (JSON Web Token)
 
-------------------------------------------------------------------------
+El token contiene *claims* que identifican al usuario:
 
-## 📡 Endpoints principales
+- UserId
+- Username
+- Expiration time
 
-### 👤 Usuario
+Ejemplo conceptual:
 
-  Method   Endpoint           Descripción
-  -------- ------------------ -------------------
-  POST     `/user/register`   Registrar usuario
-  POST     `/user/login`      Obtener JWT
+```
+HEADER.PAYLOAD.SIGNATURE
+```
 
-### 📝 Tasks
+El cliente debe enviar el token en cada request:
 
-  Method   Endpoint        Descripción
-  -------- --------------- ------------------
-  GET      `/items`        Obtener tareas
-  POST     `/items`        Crear tarea
-  PUT      `/items/{id}`   Actualizar tarea
-  DELETE   `/items/{id}`   Eliminar tarea
+```
+Authorization: Bearer <token>
+```
 
-### 🔒 Admin
+---
 
-Endpoints protegidos mediante autorización por rol.
+### 4️⃣ Autorización
 
-------------------------------------------------------------------------
+Los endpoints protegidos requieren autenticación:
 
-## ⚙️ Configuración y ejecución
+```csharp
+app.MapGet("/tasks", ...).RequireAuthorization();
+```
 
-### 1️⃣ Clonar repositorio
+Solo usuarios autenticados pueden acceder a sus tareas.
 
-``` bash
+---
+
+## 📂 Estructura del Proyecto
+
+```
+Todo-List-Restful-Api/
+│
+├── Data/
+│   └── ApplicationDbContext.cs
+│
+├── Models/
+│   ├── User.cs
+│   └── TodoItem.cs
+│
+├── Endpoints/
+│   ├── AuthEndpoints.cs
+│   └── TodoEndpoints.cs
+│
+├── Services/
+│   └── TokenService.cs
+│
+├── Program.cs
+└── appsettings.json
+```
+
+---
+
+## 📌 Funcionalidades
+
+✅ Registro de usuario  
+✅ Login con JWT  
+✅ Hash seguro de contraseñas  
+✅ CRUD completo de tareas  
+✅ Endpoints protegidos  
+✅ Documentación Swagger  
+
+---
+
+## ▶️ Cómo ejecutar el proyecto
+
+### 1. Clonar repositorio
+
+```bash
 git clone https://github.com/FedericoN22/TodoLIstApiRest.git
 ```
 
-### 2️⃣ Entrar al proyecto
+### 2. Entrar al proyecto
 
-``` bash
-cd TodoLIstApiRest/Todo-List-Restful-Api
+```bash
+cd Todo-List-Restful-Api
 ```
 
-### 3️⃣ Restaurar dependencias
+### 3. Restaurar dependencias
 
-``` bash
+```bash
 dotnet restore
 ```
 
-### 4️⃣ Aplicar migraciones
+### 4. Ejecutar migraciones
 
-``` bash
+```bash
 dotnet ef database update
 ```
 
-### 5️⃣ Ejecutar la API
+### 5. Ejecutar API
 
-``` bash
+```bash
 dotnet run
 ```
 
-------------------------------------------------------------------------
+---
 
 ## 🧪 Probar la API
 
 Abrir Swagger:
 
-    https://localhost:<port>/swagger
-
-1.  Hacer login
-2.  Copiar el token
-3.  Click en **Authorize**
-4.  Pegar:
-
-```{=html}
-<!-- -->
 ```
-    Bearer TU_TOKEN
+https://localhost:<port>/swagger
+```
 
-------------------------------------------------------------------------
+Flujo recomendado:
 
-## 🧠 Conceptos aplicados
+1. Register
+2. Login
+3. Copiar JWT
+4. Authorize en Swagger
+5. Usar endpoints protegidos
 
--   Minimal APIs pattern
--   JWT authentication
--   Claims & Roles authorization
--   Entity Framework Core
--   DTO pattern
--   Endpoint modularization
--   RESTful design
+---
 
-------------------------------------------------------------------------
+## 🧠 Conceptos backend aplicados
 
+- RESTful design
+- Dependency Injection
+- Authentication vs Authorization
+- JWT Claims
+- Password Hashing & Security
+- Separation of concerns
+- Minimal API architecture
+
+---
+
+## 📈 Posibles mejoras futuras
+
+- Refresh Tokens
+- Roles y Policies
+- Logging estructurado
+- Tests unitarios
+- Dockerización
+- Deploy en cloud
+
+---
 
 ## 👨‍💻 Autor
 
-**Federico Núñez**
+**Federico Nuñez**
 
-GitHub: https://github.com/FedericoN22
+Proyecto realizado con fines educativos y portfolio backend.
 
-------------------------------------------------------------------------
+---
 
-## 📄 License
-
-Proyecto educativo para aprendizaje backend.
-
-https://roadmap.sh/projects/todo-list-api
+⭐ Si te resulta útil, puedes darle una estrella al repositorio.
