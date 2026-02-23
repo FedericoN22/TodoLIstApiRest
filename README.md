@@ -190,17 +190,6 @@ Abrir Swagger:
 
 ------------------------------------------------------------------------
 
-## 📈 Posibles mejoras futuras
-
--   [ ] Password hashing (BCrypt)
--   [ ] Refresh Tokens
--   [ ] Repository Pattern
--   [ ] Logging estructurado
--   [ ] Unit Tests
--   [ ] Docker support
--   [ ] Rate limiting
-
-------------------------------------------------------------------------
 
 ## 👨‍💻 Autor
 
@@ -213,3 +202,5 @@ GitHub: https://github.com/FedericoN22
 ## 📄 License
 
 Proyecto educativo para aprendizaje backend.
+
+https://roadmap.sh/projects/todo-list-api
